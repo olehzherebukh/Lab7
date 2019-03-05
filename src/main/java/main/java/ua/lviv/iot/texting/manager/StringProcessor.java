@@ -8,6 +8,10 @@ import java.util.regex.Pattern;
 
 public class StringProcessor {
 
+    public static final String SPLIT_SENTENCE = "[^.!?\\s][^.!?]*(?:[.!?](?!['\"]?\\s|$)[^.!?]*)*[.!?]?['\"]?(?=\\s|$)";
+    public static final String FIND_SECOND_WORD = "^\\S+\\s*(\\S+)\\s*(\\S+)\\s*(\\S+).*$";
+    public static final String FIND_WORDS_WITH_NUMBER_OF_LETTERS = "^\\w{3,4}";
+    
     public static String readInputText() throws IOException {
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in));) {
@@ -21,16 +25,16 @@ public class StringProcessor {
     public void findingSecondWords() throws IOException {
         String text = readInputText();
 
-        Pattern pattern = Pattern.compile("[^.!?\\s][^.!?]*(?:[.!?](?!['\"]?\\s|$)[^.!?]*)*[.!?]?['\"]?(?=\\s|$)");
+        Pattern pattern = Pattern.compile(SPLIT_SENTENCE);
         Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
-            String plateNumber = matcher.group();
-            System.out.println(plateNumber);
-            Pattern regex = Pattern.compile("^\\S+\\s*(\\S+)\\s*(\\S+)\\s*(\\S+).*$");
-            Matcher matcher1 = regex.matcher(plateNumber);
-            while (matcher1.find()) {
-                String plateNumber1 = matcher1.group(1);
-                for (String st : plateNumber1.split(" ")) {
+            String firstText = matcher.group();
+            System.out.println(firstText);
+            Pattern regex = Pattern.compile(FIND_SECOND_WORD);
+            Matcher secondMatcher = regex.matcher(firstText);
+            while (secondMatcher.find()) {
+                String secondText = secondMatcher.group(1);
+                for (String st : secondText.split(" ")) {
                     if (st.startsWith("t")) {
                         System.out.println(st);
                     }
@@ -38,30 +42,20 @@ public class StringProcessor {
             }
         }
     }
-    
-    public void findingWordsInQuestionableSentences () throws IOException {
+
+    public void findingWordsInQuestionableSentences() throws IOException {
         String text = readInputText();
-        Pattern pattern = Pattern.compile("[^.!?\\s][^.!?]*(?:[.!?](?!['\"]?\\s|$)[^.!?]*)*[.!?]?['\"]?(?=\\s|$)");
+        Pattern pattern = Pattern.compile(SPLIT_SENTENCE);
         Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
-            String plateNumber = matcher.group();
-            System.out.println(plateNumber);
-            Pattern regex = Pattern.compile("\\w{3,4}");
-            Matcher matcher1 = regex.matcher(plateNumber);
-            while (matcher1.find()) {
-                String plateNumber1 = matcher1.group();
-                System.out.println(plateNumber1);
+            String firstText = matcher.group();
+            System.out.println(firstText);
+            Pattern regex = Pattern.compile(FIND_WORDS_WITH_NUMBER_OF_LETTERS);
+            Matcher secondMatcher = regex.matcher(firstText);
+            while (secondMatcher.find()) {
+                String secondText = secondMatcher.group();
+                System.out.println(secondText);
             }
-            /*String[] sentences = plateNumber.split("\\?"); 
-            for (int i = 0; i < sentences.length; i++) {
-                System.out.println(sentences[i]); */
-            }
-                
         }
-        
-        /*String[] sentences = text.split("\\?"); 
-
-        for (int i = 0; i < sentences.length; i++)
-            System.out.println(sentences[i]); */
     }
-
+}
